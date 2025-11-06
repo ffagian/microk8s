@@ -1,0 +1,44 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: platform-bootstrap
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/ffagian/k3slab.git
+    targetRevision: main
+    path: addons/cloudops/argocd-ha-install
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+# Após o ArgoCD ser instalado, este segundo app chama os demais componentes
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: addons-bootstrap
+  namespace: argocd
+spec:
+  project: cloudops
+  source:
+    repoURL: https://github.com/ffagian/k3slab.git
+    targetRevision: main
+    path: addons/cloudops
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+  directory:
+    recurse: true
