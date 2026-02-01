@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/ffagian/k3slab.git
+    repoURL: https://github.com/ffagian/microk8s.git
     targetRevision: main
     path: addons/cloudops/argocd-ha-install
   destination:
@@ -28,7 +28,7 @@ metadata:
 spec:
   project: cloudops
   source:
-    repoURL: https://github.com/ffagian/k3slab.git
+    repoURL: https://github.com/ffagian/microk8s.git
     targetRevision: main
     path: addons/cloudops
   destination:
