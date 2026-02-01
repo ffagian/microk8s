@@ -36,6 +36,22 @@ How to access the argocd portal
 #https://127.0.0.1:8080
 
 
+Generate ssh-keygen
+#ssh-keygen -t ed25519 -C "argocd@microk8s" -f argocd-github
+
+Create a ssh-key in "Deploy keys" in GitHUB portal
+#Faça esse passo pelo portal
+
+Criar o Secret do repositório no Argo CD
+#kubectl -n argocd create secret generic microk8s-repo \
+  --from-literal=url=git@github.com:ffagian/microk8s.git \
+  --from-file=sshPrivateKey=argocd-github
+
+Adicione o label
+#kubectl -n argocd label secret microk8s-repo \
+  argocd.argoproj.io/secret-type=repository
+
+
 
 
 
