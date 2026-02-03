@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kiali-dashboard
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: git@github.com:ffagian/microk8s.git
+    targetRevision: main # Lembre de alterar para 'remove-file' se ainda estiver testando na branch
+    path: addons/istio/kiali
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: istio-system # O Kiali deve rodar no mesmo namespace do Istio
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
