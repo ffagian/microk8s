@@ -9,10 +9,7 @@ spec:
   source:
     repoURL: git@github.com:ffagian/microk8s.git
     targetRevision: main
-    path: bootstrap/argocd
-    helm:
-      valueFiles:
-        - values.yaml
+    path: apps/bootstrap
 
   destination:
     server: https://kubernetes.default.svc
