@@ -1,0 +1,71 @@
+# 1. Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: echo-service
+  namespace: demo-apps
+spec:
+  ports:
+  - port: 80
+    targetPort: 8080
+    name: http
+  selector:
+    app: echo-app
+---
+# 2. Deployment (with Sidecar)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: echo-app
+  namespace: demo-apps
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: echo-app
+  template:
+    metadata:
+      labels:
+        app: echo-app
+        istio-injection: enabled # Enable Istio sidecar injection here
+    spec:
+      containers:
+      - name: echo-server
+        image: ealen/echo-server:latest # Excellent image for testing curl and headers
+        ports:
+        - containerPort: 8080
+---
+# 3. Istio Gateway (Expose the application to the cluster)
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: echo-gateway
+  namespace: demo-apps
+spec:
+  selector:
+    istio: ingressgateway # Use the default Istio gateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "meu-laboratorio.local" # Host that will be used in curl requests
+---
+# 4. VirtualService (Route the Host to the Service)
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: echo-vs
+  namespace: demo-apps
+spec:
+  hosts:
+  - "meu-laboratorio.local"
+  gateways:
+  - echo-gateway
+  http:
+  - route:
+    - destination:
+        host: echo-service
+        port:
+          number: 80
