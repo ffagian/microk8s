@@ -1,70 +1,50 @@
 # =====================================================
-# Argo CD - values.yaml (HA baseado no install.yaml)
+# Argo CD - values.yaml (Restrito: 1 Pod por Nó, Sem Reagendamento)
 # =====================================================
 
-global:
-  image:
-    tag: latest
+# Configuração para travar o Pod no nó e não deixar migrar/acumular
+commonConstraints: &commonConstraints
+  topologySpreadConstraints:
+    - maxSkew: 1
+      topologyKey: "kubernetes.io/hostname"
+      # DoNotSchedule: Se não houver nó livre, NÃO cria o pod (evita Pending)
+      whenUnsatisfiable: DoNotSchedule
+      labelSelector:
+        matchExpressions:
+          - key: app.kubernetes.io/part-of
+            operator: In
+            values:
+              - argocd
 
-# -----------------------------------------------------
-# Argo CD Server (UI + API)
-# -----------------------------------------------------
+# Estratégia para não tentar recriar pods em outros nós se um cair
+commonStrategy: &commonStrategy
+  type: RollingUpdate
+  rollingUpdate:
+    maxSurge: 0
+    maxUnavailable: 1
+
 server:
-  replicas: 2
+  replicas: 3
+  topologySpreadConstraints: *commonConstraints
+  strategy: *commonStrategy
 
-  service:
-    type: ClusterIP
-    servicePortHttp: 80
-    servicePortHttps: 443
-
-# -----------------------------------------------------
-# Repo Server (Git operations)
-# -----------------------------------------------------
 repoServer:
-  replicas: 2
+  replicas: 3
+  topologySpreadConstraints: *commonConstraints
+  strategy: *commonStrategy
 
-# -----------------------------------------------------
-# Application Controller
-# (no HA install.yaml ele fica com 1 replica)
-# -----------------------------------------------------
 controller:
-  replicas: 1
+  replicas: 3
+  # O controller é um StatefulSet, o espalhamento é nativo por réplica/nó
+  topologySpreadConstraints: *commonConstraints
 
-# -----------------------------------------------------
-# ApplicationSet Controller
-# -----------------------------------------------------
-applicationSet:
-  replicas: 1
-
-# -----------------------------------------------------
-# Dex (Auth)
-# -----------------------------------------------------
 dex:
-  enabled: true
-  replicas: 1
+  replicas: 3
+  topologySpreadConstraints: *commonConstraints
 
-# -----------------------------------------------------
-# Notifications Controller
-# -----------------------------------------------------
-notifications:
-  enabled: true
-  replicas: 1
-
-# -----------------------------------------------------
-# Redis HA
-# -----------------------------------------------------
 redis-ha:
   enabled: true
-
   haproxy:
-    enabled: true
     replicas: 3
-
   redis:
     replicas: 3
-
-# -----------------------------------------------------
-# Metrics (mantém default)
-# -----------------------------------------------------
-metrics:
-  enabled: true
