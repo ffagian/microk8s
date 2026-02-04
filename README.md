@@ -24,39 +24,37 @@ argocd-applicationset-controller is in CrashLoopBackOff.
   #kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj-labs/applicationset/v0.4.0/manifests/install.yaml
 
 
-How to get the password
-#kubectl -n argocd get secret argocd-initial-admin-secret \
-  -o jsonpath="{.data.password}" | base64 -d
+# How to get the password
+#kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
 
-password = RGoHz0OHeARxOgK4
+# Enable the ArgoCD portal access
+#kubectl port-forward svc/argocd-server -n argocd --address 0.0.0.0 8080:443 &
 
-
-Enable the ArgoCD portal access
-# kubectl port-forward svc/argocd-server -n argocd --address 0.0.0.0 8080:443 &
-
-How to access the argocd portal
+# How to access the argocd portal
 #https://127.0.0.1:8080
 
 
-Generate ssh-keygen
+# Generate ssh-keygen
 #ssh-keygen -t ed25519 -C "argocd@microk8s" -f argocd-github
 
-Create a ssh-key in "Deploy keys" in GitHUB portal
+# Create a ssh-key in "Deploy keys" in GitHUB portal
 #Faça esse passo pelo portal
 
-Criar o Secret do repositório no Argo CD
+# Criar o Secret do repositório no Argo CD
 #kubectl -n argocd create secret generic microk8s-repo \
   --from-literal=url=git@github.com:ffagian/microk8s.git \
   --from-file=sshPrivateKey=argocd-github
 
-Adicione o label
+# Adicione o label
 #kubectl -n argocd label secret microk8s-repo \
   argocd.argoproj.io/secret-type=repository
 
 
 
-
-
+#To do
+Problema no redirecioanemnto
+porque o ingress do microk8s esta conflitando com o istio.
+E entao nao esta sendo possivel acessar o kiali.
 
 
 
