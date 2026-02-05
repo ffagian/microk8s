@@ -1,0 +1,25 @@
+kiali-server:
+  spec:
+    # 1. Configurações de Servidor e URL
+    server:
+      web_root: /kiali        # Define o subcaminho para não quebrar CSS/JS
+      web_fqdn: 192.168.56.200 # Seu IP do MetalLB
+
+    # 2. Autenticação (Facilitada para Lab)
+    auth:
+      strategy: anonymous     # Remove a necessidade de Token/Login
+
+    # 3. Integração com o Prometheus (Onde estão os dados)
+    external_services:
+      prometheus:
+        # Endereço interno: http://<servico>.<namespace>.svc.cluster.local
+        url: http://prometheus-server.monitoring.svc.cluster.local
+      
+      # Se você instalar o Grafana depois, a lógica é a mesma:
+      grafana:
+        enabled: false # Mude para true quando instalar o Grafana
+
+    # 4. Visibilidade do Cluster
+    deployment:
+      accessible_namespaces:
+        - "**" # Permite ao Kiali mapear todos os Namespaces do seu cluster

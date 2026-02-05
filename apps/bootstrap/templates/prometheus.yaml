@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: prometheus
+  namespace: argocd
+  # O finalizer garante que, se você deletar a app no Argo, ele limpe os recursos no K8s
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: git@github.com:ffagian/microk8s.git # Certifique-se que este é o seu repo real
+    targetRevision: main
+    path: addons/prometheus
+    # Isso força o ArgoCD a rodar o 'helm dependency build' internamente
+    helm:
+      valueFiles:
+        - values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true # Cria o namespace 'monitoring' se ele não existir
