@@ -7,5 +7,4 @@ spec:
   host: argocd-server.argocd.svc.cluster.local
   trafficPolicy:
     tls:
-      mode: SIMPLE # O Istio vai iniciar a conversa em TLS com o ArgoCD
-      sni: argocd-server.argocd.svc.cluster.local
+      mode: DISABLE # CRÍTICO: Desliga o mTLS para este serviço específico

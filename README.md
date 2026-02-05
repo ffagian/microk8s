@@ -49,6 +49,8 @@ argocd-applicationset-controller is in CrashLoopBackOff.
 #kubectl -n argocd label secret microk8s-repo \
   argocd.argoproj.io/secret-type=repository
 
+# How to delete all pods exception pods in Running
+#kubectl get pods -A --field-selector=status.phase!=Running -o name | xargs kubectl delete
 
 
 #To do

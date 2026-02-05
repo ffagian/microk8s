@@ -1,13 +1,12 @@
 # =====================================================
-# Argo CD - values.yaml (Restrito: 1 Pod por Nó, Sem Reagendamento)
+# Argo CD - values.yaml (2 Nodes, 1 Pod por Nó)
 # =====================================================
 
-# Configuração para travar o Pod no nó e não deixar migrar/acumular
+# Constraints comuns: espalha 1 pod por nó
 commonConstraints: &commonConstraints
   topologySpreadConstraints:
     - maxSkew: 1
       topologyKey: "kubernetes.io/hostname"
-      # DoNotSchedule: Se não houver nó livre, NÃO cria o pod (evita Pending)
       whenUnsatisfiable: DoNotSchedule
       labelSelector:
         matchExpressions:
@@ -16,35 +15,38 @@ commonConstraints: &commonConstraints
             values:
               - argocd
 
-# Estratégia para não tentar recriar pods em outros nós se um cair
+# Estratégia conservadora (evita churn)
 commonStrategy: &commonStrategy
   type: RollingUpdate
   rollingUpdate:
     maxSurge: 0
     maxUnavailable: 1
 
+# -------------------------
+# ArgoCD Core Components
+# -------------------------
+
 server:
-  replicas: 3
+  replicas: 2
   topologySpreadConstraints: *commonConstraints
   strategy: *commonStrategy
 
 repoServer:
-  replicas: 3
+  replicas: 2
   topologySpreadConstraints: *commonConstraints
   strategy: *commonStrategy
 
 controller:
-  replicas: 3
-  # O controller é um StatefulSet, o espalhamento é nativo por réplica/nó
+  replicas: 2
   topologySpreadConstraints: *commonConstraints
 
 dex:
-  replicas: 3
+  replicas: 2
   topologySpreadConstraints: *commonConstraints
 
+# -------------------------
+# Redis (Single - recomendado para 2 nodes)
+# -------------------------
+
 redis-ha:
-  enabled: true
-  haproxy:
-    replicas: 3
-  redis:
-    replicas: 3
+  enabled: false
