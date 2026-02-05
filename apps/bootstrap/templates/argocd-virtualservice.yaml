@@ -9,7 +9,7 @@ spec:
   gateways:
   - istio-system/ingress-gateway-config
   http:
-  # 1. Rota para o Kiali (mais específica vem primeiro)
+  # 1. Rota para o Kiali
   - match:
     - uri:
         prefix: /kiali
@@ -19,7 +19,7 @@ spec:
         port:
           number: 20001
 
-  # 2. Rota para o ArgoCD (Raiz - pega tudo o que sobrar)
+  # 2. Rota para o ArgoCD na Raiz (usando a porta segura interna)
   - match:
     - uri:
         prefix: /
@@ -27,4 +27,4 @@ spec:
     - destination:
         host: argocd-server.argocd.svc.cluster.local
         port:
-          number: 80
+          number: 443
