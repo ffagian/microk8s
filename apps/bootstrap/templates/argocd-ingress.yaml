@@ -5,17 +5,13 @@ metadata:
   namespace: argocd
   annotations:
     kubernetes.io/ingress.class: nginx
-    # Informa ao Nginx que o serviço de destino (backend) fala HTTPS
+    # Avisa ao Nginx para falar HTTPS com o pod do ArgoCD
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-    # Permite que o tráfego SSL passe sem ser alterado (evita erros de certificado)
+    # Permite o redirecionamento correto do tráfego SSL
     nginx.ingress.kubernetes.io/ssl-passthrough: "true"
-    # Aumenta o timeout para evitar quedas em sincronizações longas
-    nginx.ingress.kubernetes.io/proxy-connect-timeout: "300"
-    nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
-    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
 spec:
   rules:
-  - host: argocd-app-of-apps.lab.local
+  - host: argocd-app-of-apps.lab.local  # <--- Deve ser IGUAL à URL da imagem
     http:
       paths:
       - path: /
