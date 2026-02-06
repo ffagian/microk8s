@@ -15,7 +15,7 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
 spec:
   rules:
-  - host: argocd.lab.local
+  - host: argocd-app-of-apps.lab.local
     http:
       paths:
       - path: /
