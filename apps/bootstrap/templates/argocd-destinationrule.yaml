@@ -7,4 +7,10 @@ spec:
   host: argocd-server.argocd.svc.cluster.local
   trafficPolicy:
     tls:
-      mode: DISABLE # CRÍTICO: Desliga o mTLS para este serviço específico
+      mode: DISABLE  # Mude de SIMPLE para DISABLE
+
+-rwxrwxrwx 1 felipe felipe  128 Feb  5 11:11 argocd-cm-patch.yaml
+-rwxrwxrwx 1 felipe felipe  256 Feb  5 13:44 argocd-destinationrule.yaml
+-rwxrwxrwx 1 felipe felipe  537 Feb  5 13:43 argocd-ingress.yaml
+-rwxrwxrwx 1 felipe felipe  495 Feb  3 20:34 argocd-manager.yaml
+-rwxrwxrwx 1 felipe felipe  271 Feb  5 12:06 argocd-server-patch.yaml
