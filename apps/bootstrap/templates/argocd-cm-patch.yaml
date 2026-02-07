@@ -4,12 +4,13 @@ metadata:
   name: argocd-server
   namespace: argocd
 spec:
-  # Adicionando o seletor para evitar o erro de 'Invalid Value'
+  # Isso diz ao Kubernetes: "Estou falando do mesmo Deployment de antes"
   selector:
     matchLabels:
       app.kubernetes.io/name: argocd-server
   template:
     metadata:
+      # As labels do pod precisam bater com o seletor acima
       labels:
         app.kubernetes.io/name: argocd-server
     spec:
@@ -17,6 +18,6 @@ spec:
       - name: argocd-server
         command:
         - argocd-server
-        - --insecure
+        - --insecure      # Garante o acesso via HTTP (porta 8080 interna)
         - --staticassets
         - /shared/app
