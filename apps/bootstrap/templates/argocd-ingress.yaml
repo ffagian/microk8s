@@ -5,8 +5,10 @@ metadata:
   namespace: argocd
   annotations:
     kubernetes.io/ingress.class: nginx
-    # Informamos que o backend agora fala HTTP simples
-    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    # MUDANÇA AQUI: Protocolo para HTTPS
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
   ingressClassName: nginx
   rules:
@@ -19,4 +21,4 @@ spec:
           service:
             name: argocd-server
             port:
-              number: 80  # Porta 80 do SVC mapeia para 8080 do Pod
+              number: 443 # MUDANÇA AQUI: Porta 443 para o Service
