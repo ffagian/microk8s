@@ -4,19 +4,10 @@ metadata:
   name: argocd-server
   namespace: argocd
 spec:
-  # O seletor garante que o K8s saiba qual Pod gerenciar
-  selector:
-    matchLabels:
-      app.kubernetes.io/name: argocd-server
   template:
-    metadata:
-      labels:
-        app.kubernetes.io/name: argocd-server
     spec:
       containers:
       - name: argocd-server
-        command:
-        - argocd-server
-        # AQUI: Removido o --insecure para permitir HTTPS
+        args:
         - --staticassets
-        - /shared/app
+        # NOTA: Omitimos o --insecure para que o servidor use o certificado auto-assinado interno na 443.
