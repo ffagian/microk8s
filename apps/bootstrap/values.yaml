@@ -30,6 +30,8 @@ server:
   replicas: 2
   topologySpreadConstraints: *commonConstraints
   strategy: *commonStrategy
+  service:
+    type: ClusterIP
 
 repoServer:
   replicas: 2
