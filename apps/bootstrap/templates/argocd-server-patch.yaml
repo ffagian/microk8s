@@ -11,6 +11,9 @@ spec:
         command:
         - argocd-server
         - --staticassets
+        - --server-base-href
+        - /
         - --repo-server
         - argocd-repo-server:8081
-        # Removendo o --insecure para permitir o TLS na porta 443
+        - --redis
+        - argocd-redis:6379
