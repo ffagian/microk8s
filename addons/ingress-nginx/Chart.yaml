@@ -1,0 +1,9 @@
+apiVersion: v2
+name: ingress-nginx
+description: NGINX Ingress Controller para expor ArgoCD
+type: application
+version: 0.1.0
+dependencies:
+  - name: ingress-nginx
+    version: "4.x.x"  # ajuste para a versão que preferir
+    repository: "https://kubernetes.github.io/ingress-nginx"
