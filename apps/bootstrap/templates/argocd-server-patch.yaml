@@ -8,6 +8,9 @@ spec:
     spec:
       containers:
       - name: argocd-server
-        args:
+        command:
+        - argocd-server
         - --staticassets
-        # NOTA: Omitimos o --insecure para que o servidor use o certificado auto-assinado interno na 443.
+        - --repo-server
+        - argocd-repo-server:8081
+        # Removendo o --insecure para permitir o TLS na porta 443
