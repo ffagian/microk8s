@@ -1,0 +1,41 @@
+# =====================================================
+# Argo CD - values.yaml (Migrado para Subchart)
+# =====================================================
+
+argo-cd:  # <--- TUDO precisa estar indentado aqui para funcionar como dependência
+  # Constraints comuns
+  global:
+    topologySpreadConstraints: &commonConstraints
+      - maxSkew: 1
+        topologyKey: "kubernetes.io/hostname"
+        whenUnsatisfiable: DoNotSchedule
+        labelSelector:
+          matchLabels:
+            app.kubernetes.io/part-of: argocd
+
+  server:
+    replicas: 2
+    topologySpreadConstraints: *commonConstraints
+    service:
+      type: LoadBalancer # Alterado para expor o IP .201
+      annotations:
+        metallb.universe.tf/loadBalancerIPs: 192.168.56.201
+    extraArgs:
+      - --staticassets
+      - --server-base-href=/
+
+  repoServer:
+    replicas: 2
+    topologySpreadConstraints: *commonConstraints
+
+  controller:
+    replicas: 2
+    # O controller não suporta topologySpreadConstraints nativamente em algumas versões do chart,
+    # mas o Helm ignore se não existir.
+
+  dex:
+    replicas: 2
+    topologySpreadConstraints: *commonConstraints
+
+  redis-ha:
+    enabled: false # Correto para 2 nodes (usa Redis Single)

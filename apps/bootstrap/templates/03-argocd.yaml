@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argocd-manager
+  namespace: argocd
+  annotations:
+    # Wave 3: Ele sobe após o MetalLB (1) e o Ingress Nginx (2)
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/ffagian/microk8s.git'
+    targetRevision: HEAD
+    # Aponta para a pasta que contém o kustomization.yaml, values.yaml e ingress.yaml
+    path: addons/argocd 
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
