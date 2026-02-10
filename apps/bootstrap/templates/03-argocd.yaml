@@ -4,8 +4,8 @@ metadata:
   name: argocd-manager
   namespace: argocd
   annotations:
-    # Wave 3: Ele sobe após o MetalLB (1) e o Ingress Nginx (2)
-    argocd.argoproj.io/sync-wave: "3"
+    # Wave 4: Ele sobe após o MetalLB (1) e o Ingress Nginx (2)
+    argocd.argoproj.io/sync-wave: "4"
 spec:
   project: default
   source:

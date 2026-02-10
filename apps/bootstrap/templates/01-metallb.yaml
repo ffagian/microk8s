@@ -4,13 +4,14 @@ metadata:
   name: addon-metallb
   namespace: argocd
   annotations:
+    # Wave 1: Instala o controlador e os CRDs primeiro
     argocd.argoproj.io/sync-wave: "1"
 spec:
   project: default
   source:
     repoURL: 'https://github.com/ffagian/microk8s.git'
     targetRevision: HEAD
-    path: addons/metallb
+    path: addons/metallb # Pasta que contém apenas o kustomization.yaml com a URL do MetalLB
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: metallb-system

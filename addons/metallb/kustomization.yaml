@@ -2,9 +2,4 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  # Manifesto base do MetalLB
   - https://raw.githubusercontent.com/metallb/metallb/v0.14.3/config/manifests/metallb-native.yaml
-  # Suas configurações segmentadas
-  - pool-nginx.yaml
-  - pool-istio.yaml
-  - advertisement.yaml
