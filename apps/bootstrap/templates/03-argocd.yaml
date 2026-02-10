@@ -11,12 +11,20 @@ spec:
     repoURL: 'https://github.com/ffagian/microk8s.git'
     targetRevision: HEAD
     path: addons/argocd 
-    # ADICIONE O BLOCO ABAIXO:
     kustomize:
-      buildOptions: --enable-helm
+      buildOptions: --enable-helm # Essencial para ler seu values.yaml
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: argocd
+  
+  # --- ADICIONE O BLOCO ABAIXO PARA ESTABILIZAR O BOOTSTRAP ---
+  ignoreDifferences:
+    - group: argoproj.io
+      kind: Application
+      jsonPointers:
+        - /status # Ignora mudanças de status no Sync, focando apenas no código
+  # -----------------------------------------------------------
+
   syncPolicy:
     automated:
       prune: true
