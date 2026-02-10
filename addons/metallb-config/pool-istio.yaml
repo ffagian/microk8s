@@ -1,4 +1,4 @@
-apiVersion: metallb.universe.tf/v1beta1
+apiVersion: metallb.io/v1beta1  # <-- Ajustado para a versão atual
 kind: IPAddressPool
 metadata:
   name: istio-pool
@@ -6,4 +6,4 @@ metadata:
 spec:
   addresses:
     - 192.168.56.200-192.168.56.200
-  autoAssign: false
+  autoAssign: false # Permite que o serviço do Istio encontre este IP
