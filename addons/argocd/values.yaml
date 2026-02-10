@@ -3,10 +3,6 @@
 # =====================================================
 
 argo-cd:  # <--- TUDO precisa estar indentado aqui para funcionar como dependência
-  # Constraints comuns
-  configs:
-      cm:
-        kustomize.buildOptions: "--enable-helm"
 
   global:
     topologySpreadConstraints: &commonConstraints
