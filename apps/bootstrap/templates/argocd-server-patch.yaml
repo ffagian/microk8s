@@ -8,8 +8,7 @@ spec:
     spec:
       containers:
       - name: argocd-server
-        command:
-        - argocd-server
+        args:
         - --staticassets
         - --server-base-href
         - /
