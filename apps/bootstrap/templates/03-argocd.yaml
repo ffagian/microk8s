@@ -10,11 +10,10 @@ spec:
   source:
     repoURL: 'https://github.com/ffagian/microk8s.git'
     targetRevision: HEAD
-    path: addons/argocd
-    # --- ADICIONE ESTE BLOCO ABAIXO ---
+    path: addons/argocd 
+    # ADICIONE O BLOCO ABAIXO:
     kustomize:
       buildOptions: --enable-helm
-    # ----------------------------------
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: argocd
