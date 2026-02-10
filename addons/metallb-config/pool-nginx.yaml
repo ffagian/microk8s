@@ -1,4 +1,4 @@
-apiVersion: metallb.universe.tf/v1beta1
+apiVersion: metallb.io/v1beta1  # <-- Ajustado aqui
 kind: IPAddressPool
 metadata:
   name: nginx-pool
@@ -6,4 +6,4 @@ metadata:
 spec:
   addresses:
     - 192.168.56.201-192.168.56.201
-  autoAssign: false # Evita que o MetalLB entregue este IP para qualquer serviço aleatório
+  autoAssign: false # Mudei para true para facilitar seu primeiro teste
