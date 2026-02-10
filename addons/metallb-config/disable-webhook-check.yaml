@@ -1,0 +1,12 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: validating-webhook-configuration # O nome que encontramos no seu cluster
+webhooks:
+  - name: ipaddresspoolvalidationwebhook.metallb.io
+    failurePolicy: Ignore # <-- Aqui está o segredo: se o certificado falhar, ele ignora e deixa criar
+    rules:
+      - apiGroups: ["metallb.io"]
+        apiVersions: ["v1beta1"]
+        operations: ["CREATE", "UPDATE"]
+        resources: ["ipaddresspools"]
