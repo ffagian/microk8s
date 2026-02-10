@@ -4,15 +4,17 @@ metadata:
   name: argocd-manager
   namespace: argocd
   annotations:
-    # Wave 4: Ele sobe após o MetalLB (1) e o Ingress Nginx (2)
     argocd.argoproj.io/sync-wave: "4"
 spec:
   project: default
   source:
     repoURL: 'https://github.com/ffagian/microk8s.git'
     targetRevision: HEAD
-    # Aponta para a pasta que contém o kustomization.yaml, values.yaml e ingress.yaml
-    path: addons/argocd 
+    path: addons/argocd
+    # --- ADICIONE ESTE BLOCO ABAIXO ---
+    kustomize:
+      buildOptions: --enable-helm
+    # ----------------------------------
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: argocd
