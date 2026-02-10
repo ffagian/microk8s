@@ -1,13 +1,15 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
+# Recursos extras que não estão no Helm oficial
 resources:
   - ingress.yaml
 
+# Configuração do Helm Chart
 helmCharts:
   - name: argo-cd
     releaseName: argocd
-    version: 5.51.6 # Ou a versão que preferir
+    version: 6.7.11 # Versão estável do Chart
     repo: https://argoproj.github.io/argo-helm
     namespace: argocd
     valuesFile: values.yaml

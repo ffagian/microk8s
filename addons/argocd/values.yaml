@@ -1,41 +1,30 @@
-# =====================================================
-# Argo CD - values.yaml (Migrado para Subchart)
-# =====================================================
-
-argo-cd:  # <--- TUDO precisa estar indentado aqui para funcionar como dependência
-  # Constraints comuns
+argo-cd:
   global:
-    topologySpreadConstraints: &commonConstraints
+    # Isso garante que os pods tentem se espalhar entre os hosts
+    topologySpreadConstraints:
       - maxSkew: 1
         topologyKey: "kubernetes.io/hostname"
-        whenUnsatisfiable: DoNotSchedule
-        labelSelector:
-          matchLabels:
-            app.kubernetes.io/part-of: argocd
+        whenUnsatisfiable: DoNotSchedule # Força a espalhar (1 em cada nó)
 
   server:
     replicas: 2
-    topologySpreadConstraints: *commonConstraints
+    # Mantemos como ClusterIP (padrão) pois usaremos o Ingress.yaml para expor
     service:
-      type: LoadBalancer # Alterado para expor o IP .201
-      annotations:
-        metallb.universe.tf/loadBalancerIPs: 192.168.56.201
+      type: ClusterIP 
     extraArgs:
-      - --staticassets
-      - --server-base-href=/
+      - --ssl-passthrough # Necessário para o Ingress Nginx não quebrar o HTTPS
 
   repoServer:
     replicas: 2
-    topologySpreadConstraints: *commonConstraints
 
   controller:
-    replicas: 2
-    # O controller não suporta topologySpreadConstraints nativamente em algumas versões do chart,
-    # mas o Helm ignore se não existir.
+    replicas: 1 # IMPORTANTE: O controller não suporta HA nativo sem Sharding complexo.
+                # Se o nó do controller cair, o Kubernetes sobe ele no outro nó em segundos.
 
   dex:
     replicas: 2
-    topologySpreadConstraints: *commonConstraints
 
-  redis-ha:
-    enabled: false # Correto para 2 nodes (usa Redis Single)
+  redis:
+    # Em 2 nós, não use Redis-HA (que exige 3 nodes para quorum).
+    # O Redis simples com persistência é mais seguro aqui.
+    enabled: true
