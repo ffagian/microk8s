@@ -11,7 +11,3 @@ helmCharts:
     version: 6.7.11
     repo: https://argoproj.github.io/argo-helm
     valuesFile: values.yaml
-
-# USE ISSO PARA MODIFICAR O CONFIGMAP DO HELM:
-patches:
-  - path: argocd-cm.yaml
