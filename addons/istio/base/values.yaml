@@ -1,4 +1,0 @@
-# Configurações customizadas da base do Istio podem entrar aqui.
-# Por enquanto, deixaremos o padrão.
-base:
-  enableAnalysis: true

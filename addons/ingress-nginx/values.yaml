@@ -1,10 +1,21 @@
 ingress-nginx:
   controller:
+    replicaCount: 1 # Para laboratório, 1 é suficiente
+    
+    # Configurações do Serviço para pegar o IP .201
     service:
-      type: LoadBalancer
-      # Esta anotação é o que o MetalLB realmente ouve hoje em dia:
       annotations:
-        metallb.universe.tf/loadBalancerIPs: 192.168.56.201
-      # Você pode manter o campo abaixo por compatibilidade, mas a annotation manda:
+        # Aqui conectamos com o nome que você deu no pool-nginx.yaml do MetalLB
+        metallb.universe.tf/address-pool: nginx-pool
       loadBalancerIP: 192.168.56.201
-      externalTrafficPolicy: Local
+      type: LoadBalancer
+
+    # Habilita o SSL Passthrough para o ArgoCD funcionar corretamente
+    extraArgs:
+      enable-ssl-passthrough: ""
+
+    # Garante que o Ingress use a classe 'nginx'
+    ingressClassResource:
+      name: nginx
+      enabled: true
+      default: true
