@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: argocd-cm
-  namespace: argocd
-data:
-  # Esta linha substitui o comando 'kubectl patch' que faríamos na mão
-  kustomize.buildOptions: --enable-helm
