@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: addon-metallb-config
+  namespace: argocd
+  annotations:
+    # Wave 2: Só será executado quando o addon-metallb (Wave 1) estiver Healthy
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/ffagian/microk8s.git'
+    targetRevision: HEAD
+    path: addons/metallb-config # Nova pasta com seus arquivos de Pool
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: metallb-system # Mesma namespace do controlador
+  syncPolicy:
+    automated: {prune: true, selfHeal: true}
