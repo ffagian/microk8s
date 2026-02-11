@@ -4,16 +4,21 @@ metadata:
   name: addon-metallb-config
   namespace: argocd
   annotations:
-    # Wave 2: Só será executado quando o addon-metallb (Wave 1) estiver Healthy
+    # Wave 2: Só executa após os CRDs do MetalLB (Wave 1) estarem prontos
     argocd.argoproj.io/sync-wave: "2"
 spec:
   project: default
   source:
     repoURL: 'https://github.com/ffagian/microk8s.git'
     targetRevision: HEAD
-    path: addons/metallb-config # Nova pasta com seus arquivos de Pool
+    path: addons/metallb-config # Pasta com IPAddressPool e L2Advertisement
   destination:
     server: 'https://kubernetes.default.svc'
-    namespace: metallb-system # Mesma namespace do controlador
+    namespace: metallb-system # Deve ser o mesmo namespace do controlador MetalLB
   syncPolicy:
-    automated: {prune: true, selfHeal: true}
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      # CRITICAL: Evita que o ArgoCD falhe ao validar o recurso se o CRD ainda estiver inicializando
+      - SkipDryRunOnMissingResource=true
