@@ -1,6 +1,10 @@
+# =====================================================
+# Argo CD - values.yaml (Configuração HA)
+# =====================================================
+
 argo-cd:
   global:
-    # Resolve o problema do Service não achar os Pods
+    # Resolve o problema do Service não achar os Pods (Labels de Identidade)
     additionalLabels:
       app.kubernetes.io/instance: argocd
       app.kubernetes.io/part-of: argocd
@@ -17,7 +21,11 @@ argo-cd:
     replicas: 2
     topologySpreadConstraints: *commonConstraints
     service:
-      type: ClusterIP # O Ingress fará o papel de porta de entrada
+      type: ClusterIP # Interno, pois o Nginx no IP .201 fará o roteamento
+    extraArgs:
+      - --staticassets
+      - --server-base-href=/
+      - --insecure # Permite que o Ingress Nginx faça o offload do SSL se necessário
 
   repoServer:
     replicas: 2
@@ -27,4 +35,4 @@ argo-cd:
     replicas: 2
 
   redis-ha:
-    enabled: true
+    enabled: false # Para 2 nodes, Redis single é mais estável
