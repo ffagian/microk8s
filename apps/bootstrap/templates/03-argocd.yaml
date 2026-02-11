@@ -7,18 +7,29 @@ metadata:
     argocd.argoproj.io/sync-wave: "4"
 spec:
   project: default
+
   source:
-    repoURL: 'https://github.com/ffagian/microk8s.git'
+    repoURL: https://github.com/ffagian/microk8s.git
     targetRevision: HEAD
     path: addons/argocd
+
+    helm:
+      chart: argo-cd
+      repo: https://argoproj.github.io/argo-helm
+      targetRevision: 6.7.11
+      valueFiles:
+        - values.yaml
+
   destination:
-    server: 'https://kubernetes.default.svc'
+    server: https://kubernetes.default.svc
     namespace: argocd
+
   ignoreDifferences:
     - group: argoproj.io
       kind: Application
       jsonPointers:
         - /status
+
   syncPolicy:
     automated:
       prune: true
