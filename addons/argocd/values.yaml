@@ -1,38 +1,89 @@
 # =====================================================
-# Argo CD - values.yaml (Configuração HA)
+# Argo CD - HA para 2 nodes
+# 1 pod por node (obrigatório)
 # =====================================================
 
-argo-cd:
-  global:
-    # Resolve o problema do Service não achar os Pods (Labels de Identidade)
-    additionalLabels:
-      app.kubernetes.io/instance: argocd
-      app.kubernetes.io/part-of: argocd
-    
-    topologySpreadConstraints: &commonConstraints
-      - maxSkew: 1
-        topologyKey: "kubernetes.io/hostname"
-        whenUnsatisfiable: DoNotSchedule
-        labelSelector:
-          matchLabels:
-            app.kubernetes.io/part-of: argocd
+global:
+  additionalLabels:
+    app.kubernetes.io/instance: argocd
+    app.kubernetes.io/part-of: argocd
 
-  server:
-    replicas: 2
-    topologySpreadConstraints: *commonConstraints
-    service:
-      type: ClusterIP # Interno, pois o Nginx no IP .201 fará o roteamento
-    extraArgs:
-      - --staticassets
-      - --server-base-href=/
-      - --insecure # Permite que o Ingress Nginx faça o offload do SSL se necessário
+# -----------------------------------------------------
+# ArgoCD Server
+# -----------------------------------------------------
 
-  repoServer:
-    replicas: 2
-    topologySpreadConstraints: *commonConstraints
+server:
+  replicas: 2
 
-  controller:
-    replicas: 2
+  service:
+    type: ClusterIP
 
-  redis-ha:
-    enabled: false # Para 2 nodes, Redis single é mais estável
+  extraArgs:
+    - --insecure
+    - --staticassets
+    - --server-base-href=/
+
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values:
+                  - argocd-server
+          topologyKey: kubernetes.io/hostname
+
+# -----------------------------------------------------
+# Repo Server
+# -----------------------------------------------------
+
+repoServer:
+  replicas: 2
+
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values:
+                  - argocd-repo-server
+          topologyKey: kubernetes.io/hostname
+
+# -----------------------------------------------------
+# Application Controller
+# -----------------------------------------------------
+
+controller:
+  replicas: 2
+
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values:
+                  - argocd-application-controller
+          topologyKey: kubernetes.io/hostname
+
+# -----------------------------------------------------
+# Redis (single)
+# -----------------------------------------------------
+
+redis:
+  enabled: true
+
+redis-ha:
+  enabled: false
+
+# -----------------------------------------------------
+# Configurações internas
+# -----------------------------------------------------
+
+configs:
+  params:
+    server.insecure: true
