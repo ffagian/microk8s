@@ -1,9 +1,8 @@
 apiVersion: metallb.io/v1beta1
 kind: L2Advertisement
 metadata:
-  name: l2-adv
+  name: nginx-advertisement
   namespace: metallb-system
 spec:
   ipAddressPools:
     - nginx-pool
-    - istio-pool
