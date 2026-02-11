@@ -6,10 +6,14 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/ssl-passthrough: "true"
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    # Parâmetros de estabilidade para gRPC/Long Connections
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
 spec:
-  ingressClassName: nginx  # <--- Mantemos a correção da Classe
+  ingressClassName: nginx
   rules:
-  - http:                   # <--- Removemos a linha "host: ..."
+  - http:
       paths:
       - path: /
         pathType: Prefix
