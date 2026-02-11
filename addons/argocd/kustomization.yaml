@@ -4,6 +4,10 @@ kind: Kustomization
 # ADICIONE ESTA LINHA ABAIXO:
 namespace: argocd
 
+commonLabels:
+  app.kubernetes.io/instance: argocd
+  app.kubernetes.io/part-of: argocd
+
 resources:
   - ingress.yaml
 
