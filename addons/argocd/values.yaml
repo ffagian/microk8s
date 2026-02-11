@@ -1,10 +1,10 @@
-# =====================================================
-# Argo CD - values.yaml (Migrado para Subchart)
-# =====================================================
-
-argo-cd:  # <--- TUDO precisa estar indentado aqui para funcionar como dependência
-
+argo-cd:
   global:
+    # Resolve o problema do Service não achar os Pods
+    additionalLabels:
+      app.kubernetes.io/instance: argocd
+      app.kubernetes.io/part-of: argocd
+    
     topologySpreadConstraints: &commonConstraints
       - maxSkew: 1
         topologyKey: "kubernetes.io/hostname"
@@ -17,12 +17,7 @@ argo-cd:  # <--- TUDO precisa estar indentado aqui para funcionar como dependên
     replicas: 2
     topologySpreadConstraints: *commonConstraints
     service:
-      type: LoadBalancer # Alterado para expor o IP .201
-      annotations:
-        metallb.universe.tf/loadBalancerIPs: 192.168.56.201
-    extraArgs:
-      - --staticassets
-      - --server-base-href=/
+      type: ClusterIP # O Ingress fará o papel de porta de entrada
 
   repoServer:
     replicas: 2
@@ -30,12 +25,6 @@ argo-cd:  # <--- TUDO precisa estar indentado aqui para funcionar como dependên
 
   controller:
     replicas: 2
-    # O controller não suporta topologySpreadConstraints nativamente em algumas versões do chart,
-    # mas o Helm ignore se não existir.
-
-  dex:
-    replicas: 2
-    topologySpreadConstraints: *commonConstraints
 
   redis-ha:
-    enabled: false # Correto para 2 nodes (usa Redis Single)
+    enabled: true
