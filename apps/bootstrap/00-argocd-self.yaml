@@ -13,8 +13,39 @@ spec:
     chart: argo-cd
     targetRevision: 6.7.11
     helm:
-      valueFiles:
-        - 00-argocd-values.yaml
+      values: |
+        controller:
+          replicas: 2
+          topologySpreadConstraints:
+            - maxSkew: 1
+              topologyKey: kubernetes.io/hostname
+              whenUnsatisfiable: DoNotSchedule
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: argocd-application-controller
+
+        server:
+          replicas: 2
+          topologySpreadConstraints:
+            - maxSkew: 1
+              topologyKey: kubernetes.io/hostname
+              whenUnsatisfiable: DoNotSchedule
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: argocd-server
+
+        repoServer:
+          replicas: 2
+          topologySpreadConstraints:
+            - maxSkew: 1
+              topologyKey: kubernetes.io/hostname
+              whenUnsatisfiable: DoNotSchedule
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: argocd-repo-server
+
+        redis:
+          enabled: true
 
   destination:
     server: https://kubernetes.default.svc
@@ -24,3 +55,5 @@ spec:
     automated:
       prune: true
       selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
