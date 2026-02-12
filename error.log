@@ -1,0 +1,378 @@
+Name:         argocd-manager
+Namespace:    argocd
+Labels:       <none>
+Annotations:  argocd.argoproj.io/sync-wave: 4
+              argocd.argoproj.io/tracking-id: bootstrap:argoproj.io/Application:argocd/argocd-manager
+API Version:  argoproj.io/v1alpha1
+Kind:         Application
+Metadata:
+  Creation Timestamp:  2026-02-10T20:16:09Z
+  Generation:          732
+  Resource Version:    1057549
+  UID:                 bdb7a964-2d0e-45aa-987c-7ad619b55b71
+Spec:
+  Destination:
+    Namespace:  argocd
+    Server:     https://kubernetes.default.svc
+  Ignore Differences:
+    Group:  argoproj.io
+    Json Pointers:
+      /status
+    Kind:   Application
+  Project:  default
+  Source:
+    Helm:
+      Value Files:
+        values.yaml
+    Path:             addons/argocd
+    Repo URL:         https://github.com/ffagian/microk8s.git
+    Target Revision:  HEAD
+  Sync Policy:
+    Automated:
+      Prune:      true
+      Self Heal:  true
+    Sync Options:
+      CreateNamespace=true
+Status:
+  Conditions:
+    Last Transition Time:  2026-02-11T23:52:17Z
+    Message:               Failed to load target state: failed to generate manifest for source 1 of 1: rpc error: code = Unknown desc = error getting helm repos: error retrieving helm dependency repos: error reading helm chart from <path to cached source>/addons/argocd/Chart.yaml: open <path to cached source>/addons/argocd/Chart.yaml: no such file or directory
+    Type:                  ComparisonError
+  Controller Namespace:    argocd
+  Health:
+    Status:  Healthy
+  History:
+    Deploy Started At:  2026-02-10T20:28:41Z
+    Deployed At:        2026-02-10T20:28:58Z
+    Id:                 0
+    Initiated By:
+    Revision:  1c5f915b1a67471f7cb0eca5dd05c09e1fb19a8d
+    Source:
+      Kustomize:
+      Path:             addons/argocd
+      Repo URL:         https://github.com/ffagian/microk8s.git
+      Target Revision:  HEAD
+    Deploy Started At:  2026-02-10T22:09:26Z
+    Deployed At:        2026-02-10T22:10:59Z
+    Id:                 1
+    Initiated By:
+    Revision:  f3397478afe119a300ee0d525166a53ec19457c9
+    Source:
+      Path:             addons/argocd
+      Repo URL:         https://github.com/ffagian/microk8s.git
+      Target Revision:  HEAD
+    Deploy Started At:  2026-02-10T22:24:39Z
+    Deployed At:        2026-02-10T22:24:50Z
+    Id:                 2
+    Initiated By:
+    Revision:  51bac045a47aa68ff3cb1fc2198e30231682d6b6
+    Source:
+      Path:             addons/argocd
+      Repo URL:         https://github.com/ffagian/microk8s.git
+      Target Revision:  HEAD
+  Operation State:
+    Finished At:  2026-02-11T17:05:07Z
+    Message:      ComparisonError: Failed to load target state: failed to generate manifest for source 1 of 1: rpc error: code = Unknown desc = Manifest generation error (cached): `kustomize build <path to cached source>/addons/argocd` failed exit status 1: Error: trouble configuring builtin HelmChartInflationGenerator with config: `
+name: argo-cd
+namespace: argocd
+releaseName: argocd
+repo: https://argoproj.github.io/argo-helm
+valuesFile: values.yaml
+version: 6.7.11
+`: must specify --enable-helm
+    Operation:
+      Initiated By:
+        Username:  admin
+      Retry:
+      Sync:
+        Revision:  36ba59ce29e92e70565d2b4d1d53913850d7430b
+        Source:
+          Path:             addons/argocd
+          Repo URL:         https://github.com/ffagian/microk8s.git
+          Target Revision:  HEAD
+        Sync Options:
+          CreateNamespace=true
+        Sync Strategy:
+          Hook:
+    Phase:       Error
+    Started At:  2026-02-11T17:05:07Z
+    Sync Result:
+      Revision:  36ba59ce29e92e70565d2b4d1d53913850d7430b
+      Source:
+        Path:              addons/argocd
+        Repo URL:          https://github.com/ffagian/microk8s.git
+        Target Revision:   HEAD
+  Reconciled At:           2026-02-11T23:52:17Z
+  Resource Health Source:  appTree
+  Resources:
+    Kind:              ConfigMap
+    Name:              argocd-cm
+    Namespace:         argocd
+    Requires Pruning:  true
+    Status:            Unknown
+    Version:           v1
+    Kind:              ConfigMap
+    Name:              argocd-cmd-params-cm
+    Namespace:         argocd
+    Requires Pruning:  true
+    Status:            Unknown
+    Version:           v1
+    Kind:              ConfigMap
+    Name:              argocd-gpg-keys-cm
+    Namespace:         argocd
+    Requires Pruning:  true
+    Status:            Unknown
+    Version:           v1
+    Kind:              ConfigMap
+    Name:              argocd-notifications-cm
+    Namespace:         argocd
+    Requires Pruning:  true
+    Status:            Unknown
+    Version:           v1
+    Kind:              ConfigMap
+    Name:              argocd-rbac-cm
+    Namespace:         argocd
+    Requires Pruning:  true
+    Status:            Unknown
+    Version:           v1
+    Kind:              ConfigMap
+    Name:              argocd-redis-health-configmap
+    Namespace:         argocd
+    Requires Pruning:  true
+    Status:            Unknown
+    Version:           v1
+    Kind:              ConfigMap
+    Name:              argocd-ssh-known-hosts-cm
+    Namespace:         argocd
+    Requires Pruning:  true
+    Status:            Unknown
+    Version:           v1
+    Kind:              ConfigMap
+    Name:              argocd-tls-certs-cm
+    Namespace:         argocd
+    Requires Pruning:  true
+    Status:            Unknown
+    Version:           v1
+    Kind:              Secret
+    Name:              argocd-notifications-secret
+    Namespace:         argocd
+    Requires Pruning:  true
+    Status:            Unknown
+    Version:           v1
+    Kind:              Secret
+    Name:              argocd-secret
+    Namespace:         argocd
+    Requires Pruning:  true
+    Status:            Unknown
+    Version:           v1
+    Kind:              Service
+    Name:              argocd-applicationset-controller
+    Namespace:         argocd
+    Requires Pruning:  true
+    Status:            Unknown
+    Version:           v1
+    Kind:              Service
+    Name:              argocd-dex-server
+    Namespace:         argocd
+    Requires Pruning:  true
+    Status:            Unknown
+    Version:           v1
+    Kind:              Service
+    Name:              argocd-redis
+    Namespace:         argocd
+    Requires Pruning:  true
+    Status:            Unknown
+    Version:           v1
+    Kind:              Service
+    Name:              argocd-server
+    Namespace:         argocd
+    Requires Pruning:  true
+    Status:            Unknown
+    Version:           v1
+    Kind:              ServiceAccount
+    Name:              argocd-application-controller
+    Namespace:         argocd
+    Requires Pruning:  true
+    Status:            Unknown
+    Version:           v1
+    Kind:              ServiceAccount
+    Name:              argocd-applicationset-controller
+    Namespace:         argocd
+    Requires Pruning:  true
+    Status:            Unknown
+    Version:           v1
+    Kind:              ServiceAccount
+    Name:              argocd-dex-server
+    Namespace:         argocd
+    Requires Pruning:  true
+    Status:            Unknown
+    Version:           v1
+    Kind:              ServiceAccount
+    Name:              argocd-notifications-controller
+    Namespace:         argocd
+    Requires Pruning:  true
+    Status:            Unknown
+    Version:           v1
+    Kind:              ServiceAccount
+    Name:              argocd-repo-server
+    Namespace:         argocd
+    Requires Pruning:  true
+    Status:            Unknown
+    Version:           v1
+    Kind:              ServiceAccount
+    Name:              argocd-server
+    Namespace:         argocd
+    Requires Pruning:  true
+    Status:            Unknown
+    Version:           v1
+    Group:             networking.k8s.io
+    Kind:              Ingress
+    Name:              argocd-server-ingress
+    Namespace:         argocd
+    Requires Pruning:  true
+    Status:            Unknown
+    Version:           v1
+    Group:             rbac.authorization.k8s.io
+    Kind:              ClusterRole
+    Name:              argocd-application-controller
+    Requires Pruning:  true
+    Status:            Unknown
+    Version:           v1
+    Group:             rbac.authorization.k8s.io
+    Kind:              ClusterRole
+    Name:              argocd-notifications-controller
+    Requires Pruning:  true
+    Status:            Unknown
+    Version:           v1
+    Group:             rbac.authorization.k8s.io
+    Kind:              ClusterRole
+    Name:              argocd-server
+    Requires Pruning:  true
+    Status:            Unknown
+    Version:           v1
+    Group:             rbac.authorization.k8s.io
+    Kind:              ClusterRoleBinding
+    Name:              argocd-application-controller
+    Requires Pruning:  true
+    Status:            Unknown
+    Version:           v1
+    Group:             rbac.authorization.k8s.io
+    Kind:              ClusterRoleBinding
+    Name:              argocd-notifications-controller
+    Requires Pruning:  true
+    Status:            Unknown
+    Version:           v1
+    Group:             rbac.authorization.k8s.io
+    Kind:              ClusterRoleBinding
+    Name:              argocd-server
+    Requires Pruning:  true
+    Status:            Unknown
+    Version:           v1
+    Group:             rbac.authorization.k8s.io
+    Kind:              Role
+    Name:              argocd-application-controller
+    Namespace:         argocd
+    Requires Pruning:  true
+    Status:            Unknown
+    Version:           v1
+    Group:             rbac.authorization.k8s.io
+    Kind:              Role
+    Name:              argocd-applicationset-controller
+    Namespace:         argocd
+    Requires Pruning:  true
+    Status:            Unknown
+    Version:           v1
+    Group:             rbac.authorization.k8s.io
+    Kind:              Role
+    Name:              argocd-dex-server
+    Namespace:         argocd
+    Requires Pruning:  true
+    Status:            Unknown
+    Version:           v1
+    Group:             rbac.authorization.k8s.io
+    Kind:              Role
+    Name:              argocd-notifications-controller
+    Namespace:         argocd
+    Requires Pruning:  true
+    Status:            Unknown
+    Version:           v1
+    Group:             rbac.authorization.k8s.io
+    Kind:              Role
+    Name:              argocd-repo-server
+    Namespace:         argocd
+    Requires Pruning:  true
+    Status:            Unknown
+    Version:           v1
+    Group:             rbac.authorization.k8s.io
+    Kind:              Role
+    Name:              argocd-server
+    Namespace:         argocd
+    Requires Pruning:  true
+    Status:            Unknown
+    Version:           v1
+    Group:             rbac.authorization.k8s.io
+    Kind:              RoleBinding
+    Name:              argocd-application-controller
+    Namespace:         argocd
+    Requires Pruning:  true
+    Status:            Unknown
+    Version:           v1
+    Group:             rbac.authorization.k8s.io
+    Kind:              RoleBinding
+    Name:              argocd-applicationset-controller
+    Namespace:         argocd
+    Requires Pruning:  true
+    Status:            Unknown
+    Version:           v1
+    Group:             rbac.authorization.k8s.io
+    Kind:              RoleBinding
+    Name:              argocd-dex-server
+    Namespace:         argocd
+    Requires Pruning:  true
+    Status:            Unknown
+    Version:           v1
+    Group:             rbac.authorization.k8s.io
+    Kind:              RoleBinding
+    Name:              argocd-notifications-controller
+    Namespace:         argocd
+    Requires Pruning:  true
+    Status:            Unknown
+    Version:           v1
+    Group:             rbac.authorization.k8s.io
+    Kind:              RoleBinding
+    Name:              argocd-repo-server
+    Namespace:         argocd
+    Requires Pruning:  true
+    Status:            Unknown
+    Version:           v1
+    Group:             rbac.authorization.k8s.io
+    Kind:              RoleBinding
+    Name:              argocd-server
+    Namespace:         argocd
+    Requires Pruning:  true
+    Status:            Unknown
+    Version:           v1
+  Source Hydrator:
+  Summary:
+    External UR Ls:
+      https://192.168.56.201/
+  Sync:
+    Compared To:
+      Destination:
+        Namespace:  argocd
+        Server:     https://kubernetes.default.svc
+      Ignore Differences:
+        Group:  argoproj.io
+        Json Pointers:
+          /status
+        Kind:  Application
+      Source:
+        Helm:
+          Value Files:
+            values.yaml
+        Path:             addons/argocd
+        Repo URL:         https://github.com/ffagian/microk8s.git
+        Target Revision:  HEAD
+    Revision:             HEAD
+    Status:               Unknown
+Events:                   <none>

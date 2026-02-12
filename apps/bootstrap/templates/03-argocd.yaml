@@ -5,30 +5,44 @@ metadata:
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "4"
+
 spec:
   project: default
 
   source:
-    repoURL: https://github.com/ffagian/microk8s.git
-    targetRevision: HEAD
-    path: addons/argocd
+    repoURL: https://argoproj.github.io/argo-helm
+    chart: argo-cd
+    targetRevision: 6.7.11
 
     helm:
-      chart: argo-cd
-      repo: https://argoproj.github.io/argo-helm
-      targetRevision: 6.7.11
-      valueFiles:
-        - values.yaml
+      values: |
+        global:
+          topologySpreadConstraints: &commonConstraints
+            - maxSkew: 1
+              topologyKey: kubernetes.io/hostname
+              whenUnsatisfiable: DoNotSchedule
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/part-of: argocd
+
+        server:
+          replicas: 2
+          topologySpreadConstraints: *commonConstraints
+
+        repoServer:
+          replicas: 2
+          topologySpreadConstraints: *commonConstraints
+
+        controller:
+          replicas: 2
+          topologySpreadConstraints: *commonConstraints
+
+        redis-ha:
+          enabled: false
 
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
-
-  ignoreDifferences:
-    - group: argoproj.io
-      kind: Application
-      jsonPointers:
-        - /status
 
   syncPolicy:
     automated:
