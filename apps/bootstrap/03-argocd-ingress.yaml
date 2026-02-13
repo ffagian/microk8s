@@ -9,7 +9,7 @@ spec:
   project: default
   source:
     repoURL: 'https://github.com/ffagian/microk8s.git'
-    targetRevision: HEAD
+    targetRevision: main
     path: apps/bootstrap/argocd-ingress   # Aponta para o manifest do Ingress
   destination:
     server: 'https://kubernetes.default.svc'

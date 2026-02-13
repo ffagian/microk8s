@@ -11,7 +11,7 @@ spec:
   project: default
   source:
     repoURL: 'https://github.com/ffagian/microk8s.git'
-    targetRevision: HEAD
+    targetRevision: main
     path: addons/ingress-nginx
     helm:
       # O ArgoCD usará o arquivo que configuramos com o IP .201 e o SSL Passthrough
