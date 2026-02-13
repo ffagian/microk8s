@@ -10,7 +10,7 @@ spec:
   project: default
   source:
     repoURL: 'https://github.com/ffagian/microk8s.git'
-    targetRevision: HEAD
+    targetRevision: main
     path: addons/metallb-config # Pasta com IPAddressPool e L2Advertisement
   destination:
     server: 'https://kubernetes.default.svc'

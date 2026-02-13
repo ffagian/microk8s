@@ -9,43 +9,9 @@ spec:
   project: default
 
   source:
-    repoURL: https://argoproj.github.io/argo-helm
-    chart: argo-cd
-    targetRevision: 6.7.11
-    helm:
-      values: |
-        controller:
-          replicas: 2
-          topologySpreadConstraints:
-            - maxSkew: 1
-              topologyKey: kubernetes.io/hostname
-              whenUnsatisfiable: DoNotSchedule
-              labelSelector:
-                matchLabels:
-                  app.kubernetes.io/name: argocd-application-controller
-
-        server:
-          replicas: 2
-          topologySpreadConstraints:
-            - maxSkew: 1
-              topologyKey: kubernetes.io/hostname
-              whenUnsatisfiable: DoNotSchedule
-              labelSelector:
-                matchLabels:
-                  app.kubernetes.io/name: argocd-server
-
-        repoServer:
-          replicas: 2
-          topologySpreadConstraints:
-            - maxSkew: 1
-              topologyKey: kubernetes.io/hostname
-              whenUnsatisfiable: DoNotSchedule
-              labelSelector:
-                matchLabels:
-                  app.kubernetes.io/name: argocd-repo-server
-
-        redis:
-          enabled: true
+    repoURL: https://github.com/ffagian/microk8s.git
+    targetRevision: main
+    path: root/overlays/ha
 
   destination:
     server: https://kubernetes.default.svc
