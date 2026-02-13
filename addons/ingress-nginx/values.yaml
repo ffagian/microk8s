@@ -1,37 +1,38 @@
-controller:
-  # 1. Quantidade de instâncias do Nginx
-  replicaCount: 1
+ingress-nginx:
+  controller:
+    # 1. Quantidade de instâncias do Nginx
+    replicaCount: 1
 
-  # 2. Configuração do Service para integração com MetalLB
-  service:
-    enabled: true
-    type: LoadBalancer
-    # O IP fixo que você definiu no seu ambiente
-    loadBalancerIP: 192.168.56.201
-    annotations:
-      # O nome aqui deve ser EXATAMENTE o 'name' do seu IPAddressPool
-      metallb.universe.tf/address-pool: nginx-pool
+    # 2. Configuração do Service para integração com MetalLB
+    service:
+      enabled: true
+      type: LoadBalancer
+      # O IP fixo que você definiu no seu ambiente
+      loadBalancerIP: 192.168.56.201
+      annotations:
+        # O nome aqui deve ser EXATAMENTE o 'name' do seu IPAddressPool
+        metallb.universe.tf/address-pool: nginx-pool
 
-  # 3. Habilita o SSL Passthrough
-  # Essencial para o Nginx repassar o tráfego HTTPS direto para o ArgoCD
-  # sem precisar descriptografar o pacote (preservando o certificado do Argo).
-  extraArgs:
-    enable-ssl-passthrough: ""
+    # 3. Habilita o SSL Passthrough
+    # Essencial para o Nginx repassar o tráfego HTTPS direto para o ArgoCD
+    # sem precisar descriptografar o pacote (preservando o certificado do Argo).
+    extraArgs:
+      enable-ssl-passthrough: ""
 
-  # 4. Configuração da Classe de Ingress
-  ingressClassResource:
-    name: nginx
-    enabled: true
-    default: true
-    controllerValue: "k8s.io/ingress-nginx"
+    # 4. Configuração da Classe de Ingress
+    ingressClassResource:
+      name: nginx
+      enabled: true
+      default: true
+      controllerValue: "k8s.io/ingress-nginx"
 
-  # 5. Desativa Webhooks de Admissão
-  # Recomendado para ambientes MicroK8s/Laboratório para evitar erros de 
-  # validação que impedem o controlador de subir.
-  admissionWebhooks:
-    enabled: false
+    # 5. Desativa Webhooks de Admissão
+    # Recomendado para ambientes MicroK8s/Laboratório para evitar erros de
+    # validação que impedem o controlador de subir.
+    admissionWebhooks:
+      enabled: false
 
-  # 6. Parâmetros de configuração do Nginx (ConfigMap)
-  config:
-    use-forwarded-headers: "true"
-    proxy-body-size: "64m"
+    # 6. Parâmetros de configuração do Nginx (ConfigMap)
+    config:
+      use-forwarded-headers: "true"
+      proxy-body-size: "64m"
